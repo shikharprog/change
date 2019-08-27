@@ -1,0 +1,62 @@
+Sub ImportEmails()
+
+Dim OutlookApp As Outlook.Application
+Dim OutlookNamespace As Namespace
+Dim Folder As MAPIFolder
+Dim OutlookMail As Variant
+Dim i As Integer
+
+Set OutlookApp = New Outlook.Application
+Set OutlookNamespace = OutlookApp.GetNamespace("MAPI")
+Set InboxFolder = OutlookNamespace.GetDefaultFolder(olFolderInbox) '.Folders("Net Sales Report").Folders("Sales")
+
+i = 1
+
+For Each OutlookMail In InboxFolder.Items
+On Error Resume Next
+        Range("B5").Offset(i, 0).Value = OutlookMail.ReceivedTime
+        Range("E5").Offset(i, 0).Value = OutlookMail.Subject
+        Range("F5").Offset(i, 0).Value = OutlookMail.Attachments.Count
+      'On Error Resume Next
+      'If OutlookMail.Sender Is Nothing Then
+         Range("A5").Offset(i, 0).Value = OutlookMail.ConversationID
+         Range("C5").Offset(i, 0).Value = OutlookMail.ConversationIndex
+      'End If
+        'Range("eMail_text").Offset(i, 0).Value = OutlookMail.Body
+        
+        i = i + 1
+        
+    If i > 100 Then
+        Exit For
+    End If
+Next OutlookMail
+
+'Set SentFolder = OutlookNamespace.GetDefaultFolder(olFolderSentMail) '.Folders("Net Sales Report").Folders("Sales")
+'
+'i = 1
+'
+'For Each OutlookMail In SentFolder.Items
+'    If OutlookMail.ReceivedTime >= Range("C1").Value Then
+'        Range("B5").Offset(i, 0).Value = OutlookMail.ReceivedTime
+'        Range("E5").Offset(i, 0).Value = OutlookMail.Subject
+'
+'      'On Error Resume Next
+'      'If OutlookMail.Sender Is Nothing Then
+'         Range("G1").Offset(i, 0).Value = OutlookMail.ConversationID
+'      'End If
+'        'Range("eMail_text").Offset(i, 0).Value = OutlookMail.Body
+'
+'        i = i + 1
+'
+'
+'    End If
+'Next OutlookMail
+'
+
+Set InboxFolder = Nothing
+'Set SentFolder = Nothing
+Set OutlookNamespace = Nothing
+Set OutlookApp = Nothing
+
+End Sub
+
